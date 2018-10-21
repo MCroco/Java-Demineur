@@ -14,6 +14,15 @@ public class Tableau {
 		remplissageTableau();
 	}
 	
+	
+	
+	public String[][] getTab() {
+		return tab;
+	}
+	public void setTab(String[][] tab) {
+		this.tab = tab;
+	}
+
 	public boolean isBomb(int li, int co) {
 		if (tab[li][co] == null) {
 			return false;
