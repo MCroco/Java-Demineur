@@ -7,7 +7,11 @@ public class Tableau {
 	public Tableau(int lignes, int colonnes, int nbrBomb) {
 		pos = new Position[nbrBomb];
 		for (int i = 0; i<nbrBomb; i++) {
-			pos[i] = new Position(lignes, colonnes);
+			Position verif = new Position(lignes, colonnes);
+			while (isAlreadyChoosed(verif)) {
+				verif = new Position(lignes, colonnes);
+			}
+			pos[i] = verif;
 		}
 		this.tab = new String[lignes][colonnes];
 		remplissageBomb();
@@ -29,6 +33,19 @@ public class Tableau {
 		}
 		if (tab[li][co].equals("-1")) {
 			return true;
+		}
+		return false;
+	}
+	public boolean isAlreadyChoosed(Position posi) {
+		for (int i= 0; i<pos.length; i++) {
+			if (pos[i] != null) {
+				if (pos[i].equals(posi)) {
+					return true;
+				}
+			}
+			else {
+				return false;
+			}
 		}
 		return false;
 	}
