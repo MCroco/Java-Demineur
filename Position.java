@@ -5,8 +5,8 @@ public class Position {
 	private int colonne;
 	
 	public Position(int maxLigne, int maxColonne) {
-		this.ligne = (int)((Math.random()/(maxLigne+1))-1);
-		this.colonne = (int)((Math.random()/(maxColonne+1))-1);
+		this.ligne = (int)((Math.random() * (maxLigne-1))+1);
+		this.colonne = (int)((Math.random() * (maxColonne-1))+1);
 	}
 
 	public int getLigne() {
