@@ -13,11 +13,14 @@ public class Fenetre extends JFrame {
 	    this.setSize(500, 375);
 
 	    //Les données du tableau
-	    Tableau tab = new Tableau(4, 4, 3);
+	    Tableau tab = new Tableau(4, 5, 3);
 	    Object [][] data = tab.getTab();
 
 	    //Les titres des colonnes
-	    String  title[] = {"", "", "", ""};
+	    String  title[] = new String[data[0].length];
+	    for (int i = 0; i<title.length; i++) {
+	    	title[i] = "";
+	    }
 	    JTable tableau = new JTable(data, title);
 	    this.getContentPane().add(new JScrollPane(tableau));
 	  }
