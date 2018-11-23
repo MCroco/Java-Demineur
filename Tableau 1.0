@@ -250,28 +250,77 @@ public class Tableau {
 		String temp= "";
 		for (int i=0; i<tab.length; i++) {
 			temp += "\n";
+			if (i==0) {
+				temp += "  ";
+				for (int m = 0; m<tab[i].length; ++m) {
+					if(m<9){
+						temp += " 0"+ (m+1) + "";
+					}
+					else if (m==9) {
+						temp += " " + (m+1) + " ";
+					}
+					else{
+						temp +=  (m+1) + " ";
+					}
+				}
+			}
+			temp += "\n";
+			if(i<9){
+				temp += i+1 + " ";
+			}
+			else{
+				temp += i+1;
+			}
+			
 			for (int j=0; j<tab[i].length; j++) {
+				
 				if(tab[i][j].equals("0")){
 					temp+= "[ ]";
 				}
 				else{
 					temp += "[" + tab[i][j] + "]";
-					}
-				
+				}				
 			}
 		}
 		return temp;
 	}
 	
 	public static void main(String[] args) {
-		Scanner sc = new Scanner(System.in);
-		System.out.println("Veuillez entrer le nombre de lignes :");
-		lignes = sc.nextInt();
-		System.out.println("Veuillez entrer le nombre de colonnes :");
-		colonnes = sc.nextInt();
-		System.out.println("Veuillez entrer le nombre de bombes :");
-		nombreBombes = sc.nextInt();
-		Tableau tab = new Tableau(lignes, colonnes, nombreBombes);
-		System.out.println(tab.toString());
+		boolean verif = false;
+		while (!verif) {
+			Scanner sc = new Scanner(System.in);
+			System.out.println("Quel niveau de difficulté choisissez-vous ? Facile | Moyen | BADASSE | Exit");
+			String resultat = sc.nextLine();
+			
+		
+			if(resultat.equalsIgnoreCase("Facile")){
+				Tableau tab = new Tableau(10, 15, 10);
+				Tableau tabVide = new Tableau(10, 15, 0);
+				System.out.println(tab.toString());
+				System.out.println(tabVide.toString());
+				verif = true;
+			}
+			else if(resultat.equalsIgnoreCase("Moyen")){
+				Tableau tab = new Tableau(20, 30, 40);
+				Tableau tabVide = new Tableau(20, 30, 0);
+				System.out.println(tab.toString());
+				System.out.println(tabVide.toString());
+				verif = true;
+			}
+			else if(resultat.equalsIgnoreCase("BADASSE")){
+				Tableau tab = new Tableau(30, 50, 250);
+				Tableau tabVide = new Tableau(30, 50, 0);
+				System.out.println(tab.toString());
+				System.out.println(tabVide.toString());
+				verif = true;
+			}
+			else if(resultat.equalsIgnoreCase("Exit")) {
+				break;
+			}
+			else {
+				System.out.println("Vous n'avez entré aucune des possibilités proposées.");
+			}
+		}
+
 	}
 }
