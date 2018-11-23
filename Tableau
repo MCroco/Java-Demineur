@@ -1,8 +1,13 @@
 package first;
 
+import java.util.Scanner;
+
 public class Tableau {
 	private String [][] tab;
 	private Position [] pos;
+	private static int colonnes;
+	private static int lignes;
+	private static int nombreBombes;
 	
 	public Tableau(int lignes, int colonnes, int nbrBomb) {
 		pos = new Position[nbrBomb];
@@ -27,7 +32,7 @@ public class Tableau {
 		if (tab[li][co] == null) {
 			return false;
 		}
-		if (tab[li][co].equals("-1")) {
+		if (tab[li][co].equals("■")) {
 			return true;
 		}
 		return false;
@@ -36,7 +41,7 @@ public class Tableau {
 	public void remplissageBomb() {
 		for (int i=0; i<pos.length;i++) {
 			Position temp = pos[i];
-			tab[temp.getLigne()][temp.getColonne()] = "-1";
+			tab[temp.getLigne()][temp.getColonne()] = "■";
 		}
 	}
 	
@@ -246,14 +251,27 @@ public class Tableau {
 		for (int i=0; i<tab.length; i++) {
 			temp += "\n";
 			for (int j=0; j<tab[i].length; j++) {
-				temp += "[" + i + "] [" + j + "] : " + tab[i][j] + " ";
+				if(tab[i][j].equals("0")){
+					temp+= "[ ]";
+				}
+				else{
+					temp += "[" + tab[i][j] + "]";
+					}
+				
 			}
 		}
 		return temp;
 	}
 	
 	public static void main(String[] args) {
-		Tableau tab = new Tableau(4, 4, 2);
+		Scanner sc = new Scanner(System.in);
+		System.out.println("Veuillez entrer le nombre de lignes :");
+		lignes = sc.nextInt();
+		System.out.println("Veuillez entrer le nombre de colonnes :");
+		colonnes = sc.nextInt();
+		System.out.println("Veuillez entrer le nombre de bombes :");
+		nombreBombes = sc.nextInt();
+		Tableau tab = new Tableau(lignes, colonnes, nombreBombes);
 		System.out.println(tab.toString());
 	}
 }
