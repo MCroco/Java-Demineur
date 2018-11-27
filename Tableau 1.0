@@ -2,12 +2,14 @@ package first;
 
 import java.util.Scanner;
 
+import com.sun.jndi.toolkit.dir.ContextEnumerator;
+
 public class Tableau {
-	private String [][] tab;
+	private static String [][] tab;
 	private Position [] pos;
-	private static int colonnes;
-	private static int lignes;
-	private static int nombreBombes;
+	public static int colonnes;
+	public static int lignes;
+	public static int nombreBombes;
 	
 	public Tableau(int lignes, int colonnes, int nbrBomb) {
 		pos = new Position[nbrBomb];
@@ -21,6 +23,42 @@ public class Tableau {
 	
 	
 	
+	public static int getColonnes() {
+		return colonnes;
+	}
+
+
+
+	public static void setColonnes(int colonnes) {
+		Tableau.colonnes = colonnes;
+	}
+
+
+
+	public static int getLignes() {
+		return lignes;
+	}
+
+
+
+	public void setLignes(int lignes) {
+		Tableau.lignes = lignes;
+	}
+
+
+
+	public static int getNombreBombes() {
+		return nombreBombes;
+	}
+
+
+
+	public static void setNombreBombes(int nombreBombes) {
+		Tableau.nombreBombes = nombreBombes;
+	}
+
+
+
 	public String[][] getTab() {
 		return tab;
 	}
@@ -283,7 +321,20 @@ public class Tableau {
 			}
 		}
 		return temp;
+		
 	}
+
+	
+	public static String contenuCase() {
+		Scanner sc = new Scanner(System.in);
+		System.out.println("Entrez les coordonnées de la case à retourner (chiffre;chiffre");
+		String rep = sc.nextLine();
+		String temp[] = rep.split(";");
+		
+		
+		return (tab[Integer.parseInt(temp[0])][Integer.parseInt(temp[1])]);
+	}
+	
 	
 	public static void main(String[] args) {
 		boolean verif = false;
@@ -298,6 +349,7 @@ public class Tableau {
 				Tableau tabVide = new Tableau(10, 15, 0);
 				System.out.println(tab.toString());
 				System.out.println(tabVide.toString());
+				System.out.println(contenuCase());
 				verif = true;
 			}
 			else if(resultat.equalsIgnoreCase("Moyen")){
@@ -305,6 +357,7 @@ public class Tableau {
 				Tableau tabVide = new Tableau(20, 30, 0);
 				System.out.println(tab.toString());
 				System.out.println(tabVide.toString());
+				System.out.println(contenuCase());
 				verif = true;
 			}
 			else if(resultat.equalsIgnoreCase("BADASSE")){
@@ -312,6 +365,7 @@ public class Tableau {
 				Tableau tabVide = new Tableau(30, 50, 0);
 				System.out.println(tab.toString());
 				System.out.println(tabVide.toString());
+				System.out.println(contenuCase());
 				verif = true;
 			}
 			else if(resultat.equalsIgnoreCase("Exit")) {
@@ -321,6 +375,7 @@ public class Tableau {
 				System.out.println("Vous n'avez entré aucune des possibilités proposées.");
 			}
 		}
+
 
 	}
 }
