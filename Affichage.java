@@ -4,12 +4,8 @@ import java.util.Scanner;
 
 public class Affichage {
 	
-	private static int ligne;
-	private static int colonne;
-	static boolean verif2 = false;
-	
-	public static void devoilement(Tableau aff, Tableau tab, Scanner sc) {
-		System.out.println(("Entrez les coordonnÃ©es de la case Ã  retourner (Ligne(max = "+ligne+");Colonne(max = " + colonne + ")"));
+	public static boolean devoilement(Tableau aff, Tableau tab, Scanner sc) {
+		System.out.println("Entrez les coordonnées de la case à retourner (Ligne;Colonne)");
 		String rep = sc.nextLine();
 		String temp[] = rep.split(";");
 		
@@ -17,50 +13,159 @@ public class Affichage {
 		int y = Integer.parseInt(temp[1]) - 1;
 		
 		String value = tab.getCase(x, y);
-		System.out.println(value);
-
 		
-		if(value.equals("%")) {
-			
-			System.out.println("Perdu!");
-			verif2=true;
-			for(int i=0; i<ligne;i++) {
-				for(int j=0; j<colonne;j++) {
-					if(tab.getCase(i, j).equals("%")) {
-
-						String value2 = tab.getCase(i, j);
-						aff.setCase(i, j, value2);
+		if (value.equals("x")) {
+			System.out.println("Vous avez perdu !!");
+			for (int i=0; i<tab.getLignes(); i++) {
+				for (int j=0; j<tab.getColonnes(); j++) {
+					if (tab.getCase(i, j).equals("x")) {
+						aff.setCase(i, j, "x");
 					}
 				}
 			}
-			System.out.println(aff);
+			System.out.println(aff.toString());
+			return true;
 		}
-		else if(value.equals("0")){
-	
-					
-			algoRetrun(aff, tab, x, y);
 			
-		}
-		else {
-			
-			aff.setCase(x, y, tab.getCase(x, y));
-		}
-		
-		System.out.println(aff);
-		
-		
-}
-	
-	public static void algoRetrun(Tableau aff, Tableau tab, int x, int y) {
-		for(int i=-1; i<2; i++) {
-			
-			for(int j=-1; j<2; j++) {
-				
-				if(tab.getCase(x+i, y+j).equals("0")) {
-					aff.setCase(x+i, y+j, " ");
-				}
-				else aff.setCase(x+i, y+j, tab.getCase(x+i, y+j));
+		else if (value.equals("0")) {
+			chaineDevoil(aff, tab, x, y);
+			if (isAllFound(aff, tab)) {
+				System.out.println("Tu as GAGNE la partie !!! \n");
+				System.out.println(aff);
+				return true;
 			}
+			else {
+				System.out.println(aff);
+			}
+		}
+		
+		else if (isNumber(value)) {
+			aff.setCase(x, y, tab.getCase(x, y));
+			if (isAllFound(aff, tab)) {
+				System.out.println("Tu as GAGNE la partie !!! \n");
+				System.out.println(aff);
+				return true;
+			}
+			else {
+				System.out.println(aff);
+			}
+		}
+		
+		return false;
+	}
+	
+	public static boolean isAllFound(Tableau aff, Tableau tab) {
+		int nbrBombTot = tab.getNombreBombes();
+		int nbrCaseDevoil = 0;
+		int nbrCaseMax = aff.getColonnes() * aff.getLignes();
+		int nbrCaseRest = 0;
+		for( int i=0; i<aff.getLignes(); i++) {
+			for (int j=0; j<aff.getColonnes(); j++) {
+				if (!(aff.getCase(i, j).equals("0"))) {	
+					nbrCaseDevoil++;
+				}
+			}
+		}
+		
+		nbrCaseRest = nbrCaseMax - nbrCaseDevoil;
+		if (nbrBombTot == nbrCaseRest) {
+			return true;
+		}
+		return false;
+	}
+	
+	public static boolean isNumber(String value) {
+		for (int i=1; i<10; i++) {
+			String parse = i + "";
+			if (value.equals(parse)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public static void devoilZero (Tableau aff, Tableau tab, int x, int y, int limitPlacementXMin, int limitPlacementXMax, int limitPlacementYMin, int limitPlacementYMax) {
+		Position temp;
+		boolean done = false;
+		Position [][] savePosZero = new Position[3][3];
+		aff.setCase(x, y, "?");
+		while(!done) {
+			for(int i=limitPlacementXMin; i<limitPlacementXMax; i++) {
+				for(int j=limitPlacementYMin; j<limitPlacementYMax; j++) {
+					if(tab.getCase(x+i, y+j).equals("0") && Math.abs(i) != Math.abs(j)) {
+						tab.setCase(x+i, y+j, "?");
+						aff.setCase(x+i, y+j, "?");
+						temp = new Position();
+						temp.setLigne(x+i);
+						temp.setColonne(y+j);
+						savePosZero[i+1][j+1] = temp;
+					}
+				}
+			}
+			done = devoilZeroCascade(savePosZero, aff, tab);
+		}
+	}
+	
+	public static boolean devoilZeroCascade(Position [][] arg, Tableau aff, Tableau tab) {		
+		for (int i=0; i<arg.length; i++) {
+			for (int j=0; j<arg[i].length; j++) {
+				if (arg[i][j] != null) {
+					chaineDevoil(aff, tab, arg[i][j].getLigne(), arg[i][j].getColonne());
+				}
+			}
+		}
+		return true;
+	}
+	
+	public static void devoilChiffres(Tableau aff, Tableau tab, int x, int y, int limitPlacementXMin, int limitPlacementXMax, int limitPlacementYMin, int limitPlacementYMax) {
+		for(int i=limitPlacementXMin; i<limitPlacementXMax; i++) {
+			for(int j=limitPlacementYMin; j<limitPlacementYMax; j++) {
+				if(!(tab.getCase(x+i, y+j).equals("0")) && !(tab.getCase(x+i, y+j).equals("x")) && !(tab.getCase(x+i, y+j).equals("?"))) {
+					aff.setCase(x+i, y+j, tab.getCase(x+i, y+j));
+				}
+			}
+		}
+	}
+	
+	public static void chaineDevoil(Tableau aff, Tableau tab, int x, int y) {
+		int xCond = x+1;
+		int yCond = y+1;
+		
+		if (xCond!=1 && yCond!=1 && xCond!=tab.getLignes() && yCond!=tab.getColonnes()) {
+			devoilChiffres(aff, tab, x, y, -1, 2, -1, 2);
+			devoilZero(aff, tab, x, y, -1, 2, -1, 2);
+		}
+		else if (xCond==1 && yCond!=1 && xCond!=tab.getLignes() && yCond!=tab.getColonnes()) {
+			devoilChiffres(aff, tab, x, y, 0, 2, -1, 2);
+			devoilZero(aff, tab, x, y, 0, 2, -1, 2);
+		}
+		else if (xCond!=1 && yCond!=1 && xCond==tab.getLignes() && yCond!=tab.getColonnes()) {
+			devoilChiffres(aff, tab, x, y, -1, 1, -1, 2);			
+			devoilZero(aff, tab, x, y, -1, 1, -1, 2);
+		}
+		else if (xCond!=1 && yCond==1 && xCond!=tab.getLignes() && yCond!=tab.getColonnes()) {
+			devoilChiffres(aff, tab, x, y, -1, 2, 0, 2);
+			devoilZero(aff, tab, x, y, -1, 2, 0, 2);
+		}
+		else if (xCond!=1 && yCond!=1 && xCond!=tab.getLignes() && yCond==tab.getColonnes()) {
+			devoilChiffres(aff, tab, x, y, -1, 2, -1, 1);
+			devoilZero(aff, tab, x, y, -1, 2, -1, 1);
+		}
+		else if (xCond==1 && yCond==1 && xCond!=tab.getLignes() && yCond!=tab.getColonnes()) {
+			devoilChiffres(aff, tab, x, y, 0, 2, 0, 2);
+			devoilZero(aff, tab, x, y, 0, 2, 0, 2);
+		}
+		else if (xCond!=1 && yCond!=1 && xCond==tab.getLignes() && yCond==tab.getColonnes()) {
+			devoilChiffres(aff, tab, x, y, -1, 1, -1, 1);
+			devoilZero(aff, tab, x, y, -1, 1, -1, 1);
+		}
+		else if (xCond!=1 && yCond==1 && xCond==tab.getLignes() && yCond!=tab.getColonnes()) {
+			devoilChiffres(aff, tab, x, y, -1, 1, 0, 2);
+			devoilZero(aff, tab, x, y, -1, 1, 0, 2);
+		}
+		else if (xCond==1 && yCond!=1 && xCond!=tab.getLignes() && yCond==tab.getColonnes()) {
+			devoilChiffres(aff, tab, x, y, 0, 2, -1, 1);
+			devoilZero(aff, tab, x, y, 0, 2, -1, 1);
 		}
 	}
 	
@@ -71,7 +176,7 @@ public class Affichage {
 		
 		boolean verif = false;
 		while (!verif) {
-			System.out.println("Quel niveau de difficultÃ© choisissez-vous ? Facile | Moyen | BADASSE | Exit");
+			System.out.println("Quel niveau de difficulté choisissez-vous ? Facile | Moyen | BADASSE | Exit");
 			String resultat = sc.nextLine();
 			
 		
@@ -80,8 +185,6 @@ public class Affichage {
 				tabVide = new Tableau(10, 15, 0);
 				System.out.println(tab.toString());
 				System.out.println(tabVide.toString());
-				ligne = 10;
-				colonne = 15;
 				verif = true;
 			}
 			else if(resultat.equalsIgnoreCase("Moyen")){
@@ -89,8 +192,6 @@ public class Affichage {
 				tabVide = new Tableau(20, 30, 0);
 				System.out.println(tab.toString());
 				System.out.println(tabVide.toString());
-				ligne = 20;
-				colonne = 30;
 				verif = true;
 			}
 			else if(resultat.equalsIgnoreCase("BADASSE")){
@@ -98,22 +199,19 @@ public class Affichage {
 				tabVide = new Tableau(30, 50, 0);
 				System.out.println(tab.toString());
 				System.out.println(tabVide.toString());
-				ligne = 30;
-				colonne = 35;
 				verif = true;
 			}
 			else if(resultat.equalsIgnoreCase("Exit")) {
 				break;
 			}
 			else {
-				System.out.println("Vous n'avez entrÃ© aucune des possibilitÃ©s proposÃ©es.");
+				System.out.println("Vous n'avez entré aucune des possibilités proposées.");
 			}
 		}
+		boolean verif2 = false;
 		while(!verif2) {
-			
-
-			devoilement(tabVide, tab, sc);
-			
+			verif2 = devoilement(tabVide, tab, sc);
 		}
+		sc.close();
 	}
 }

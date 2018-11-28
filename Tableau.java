@@ -3,11 +3,13 @@ package first;
 public class Tableau {
 	private String [][] tab;
 	private Position [] pos;
-	public static int colonnes;
-	public static int lignes;
-	public static int nombreBombes;
+	public int colonnes;
+	public int lignes;
+	public int nombreBombes;
 	
 	public Tableau(int lignes, int colonnes, int nbrBomb) {
+		this.lignes = lignes;
+		this.colonnes = colonnes;
 		pos = new Position[nbrBomb];
 		for (int i = 0; i<nbrBomb; i++) {
 			pos[i] = new Position(lignes, colonnes);
@@ -28,11 +30,18 @@ public class Tableau {
 	public int getNombreBombes() {
 		return nombreBombes;
 	}
-
+	
+	public int getLignes() {
+		return this.lignes;
+	}
+	
+	public int getColonnes() {
+		return this.colonnes;
+	}
 
 
 	public void setNombreBombes(int nombreBombes) {
-		Tableau.nombreBombes = nombreBombes;
+		this.nombreBombes = nombreBombes;
 	}
 
 
@@ -48,7 +57,7 @@ public class Tableau {
 		if (tab[li][co] == null) {
 			return false;
 		}
-		if (tab[li][co].equals("■")) {
+		if (tab[li][co].equals("x")) {
 			return true;
 		}
 		return false;
@@ -57,7 +66,7 @@ public class Tableau {
 	public void remplissageBomb() {
 		for (int i=0; i<pos.length;i++) {
 			Position temp = pos[i];
-			tab[temp.getLigne()][temp.getColonne()] = "■";
+			tab[temp.getLigne()][temp.getColonne()] = "x";
 		}
 	}
 	
@@ -291,7 +300,7 @@ public class Tableau {
 			for (int j=0; j<tab[i].length; j++) {
 				
 				if(tab[i][j].equals("0")){
-					temp+= "[ ]";
+					temp+= "[+]";
 				}
 				else{
 					temp += "[" + tab[i][j] + "]";
