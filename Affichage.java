@@ -5,52 +5,65 @@ import java.util.Scanner;
 public class Affichage {
 	
 	public static boolean devoilement(Tableau aff, Tableau tab, Scanner sc) {
-		System.out.println("Entrez les coordonnées de la case à retourner (Ligne;Colonne)");
+		System.out.println("Entrez les coordonnées de la case à retourner (Ligne;Colonne) ou mettez \"drapeau\"\npour mettre un drapeau sur un case");
 		String rep = sc.nextLine();
-		String temp[] = rep.split(";");
 		
-		int x = Integer.parseInt(temp[0]) - 1;
-		int y = Integer.parseInt(temp[1]) - 1;
-		
-		String value = tab.getCase(x, y);
-		
-		if (value.equals("x")) {
-			System.out.println("Vous avez perdu !!");
-			for (int i=0; i<tab.getLignes(); i++) {
-				for (int j=0; j<tab.getColonnes(); j++) {
-					if (tab.getCase(i, j).equals("x")) {
-						aff.setCase(i, j, "x");
+		if(rep.equals("drapeau")) {
+			System.out.println("Entrez les coordonnées de la case où vous voulez mettre un drapeau (Ligne;Colonne)");
+			String drap = sc.nextLine();
+			String cooDrap[] = drap.split(";");
+			int xDrap = Integer.parseInt(cooDrap[0])-1;
+			int yDrap = Integer.parseInt(cooDrap[1])-1;
+			aff.setCase(xDrap, yDrap, "^");
+			System.out.println(aff);
+			
+		}
+		else {
+			String temp[] = rep.split(";");
+			
+			int x = Integer.parseInt(temp[0]) - 1;
+			int y = Integer.parseInt(temp[1]) - 1;
+			
+			String value = tab.getCase(x, y);
+			
+			if (value.equals("x")) {
+				System.out.println("Vous avez perdu !!");
+				for (int i=0; i<tab.getLignes(); i++) {
+					for (int j=0; j<tab.getColonnes(); j++) {
+						if (tab.getCase(i, j).equals("x")) {
+							aff.setCase(i, j, "x");
+						}
 					}
 				}
+				System.out.println(aff.toString());
+				return true;
 			}
-			System.out.println(aff.toString());
-			return true;
+				
+			else if (value.equals("0")) {
+				chaineDevoil(aff, tab, x, y);
+				if (isAllFound(aff, tab)) {
+					System.out.println("Tu as GAGNE la partie !!! \n");
+					System.out.println(aff);
+					return true;
+				}
+				else {
+					System.out.println(aff);
+				}
+			}
+			
+			else if (isNumber(value)) {
+				aff.setCase(x, y, tab.getCase(x, y));
+				if (isAllFound(aff, tab)) {
+					System.out.println("\n\n\nTu as GAGNE la partie !!! \n");
+					System.out.println(aff);
+					return true;
+				}
+				else {
+					System.out.println(aff);
+				}
+			}
 		}
 			
-		else if (value.equals("0")) {
-			chaineDevoil(aff, tab, x, y);
-			if (isAllFound(aff, tab)) {
-				System.out.println("Tu as GAGNE la partie !!! \n");
-				System.out.println(aff);
-				return true;
-			}
-			else {
-				System.out.println(aff);
-			}
-		}
-		
-		else if (isNumber(value)) {
-			aff.setCase(x, y, tab.getCase(x, y));
-			if (isAllFound(aff, tab)) {
-				System.out.println("\n\n\nTu as GAGNE la partie !!! \n");
-				System.out.println(aff);
-				return true;
-			}
-			else {
-				System.out.println(aff);
-			}
-		}
-		
 		return false;
 	}
 	
@@ -88,13 +101,13 @@ public class Affichage {
 		Position temp;
 		boolean done = false;
 		Position [][] savePosZero = new Position[3][3];
-		aff.setCase(x, y, "?");
+		aff.setCase(x, y, " ");
 		while(!done) {
 			for(int i=limitPlacementXMin; i<limitPlacementXMax; i++) {
 				for(int j=limitPlacementYMin; j<limitPlacementYMax; j++) {
 					if(tab.getCase(x+i, y+j).equals("0") && Math.abs(i) != Math.abs(j)) {
-						tab.setCase(x+i, y+j, "?");
-						aff.setCase(x+i, y+j, "?");
+						tab.setCase(x+i, y+j, " ");
+						aff.setCase(x+i, y+j, " ");
 						temp = new Position();
 						temp.setLigne(x+i);
 						temp.setColonne(y+j);
@@ -120,7 +133,7 @@ public class Affichage {
 	public static void devoilChiffres(Tableau aff, Tableau tab, int x, int y, int limitPlacementXMin, int limitPlacementXMax, int limitPlacementYMin, int limitPlacementYMax) {
 		for(int i=limitPlacementXMin; i<limitPlacementXMax; i++) {
 			for(int j=limitPlacementYMin; j<limitPlacementYMax; j++) {
-				if(!(tab.getCase(x+i, y+j).equals("0")) && !(tab.getCase(x+i, y+j).equals("x")) && !(tab.getCase(x+i, y+j).equals("?"))) {
+				if(!(tab.getCase(x+i, y+j).equals("0")) && !(tab.getCase(x+i, y+j).equals("x")) && !(tab.getCase(x+i, y+j).equals("0"))) {
 					aff.setCase(x+i, y+j, tab.getCase(x+i, y+j));
 				}
 			}
