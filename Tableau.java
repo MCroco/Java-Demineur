@@ -10,6 +10,7 @@ public class Tableau {
 	public Tableau(int lignes, int colonnes, int nbrBomb) {
 		this.lignes = lignes;
 		this.colonnes = colonnes;
+		this.nombreBombes = nbrBomb;
 		pos = new Position[nbrBomb];
 		for (int i = 0; i<nbrBomb; i++) {
 			pos[i] = new Position(lignes, colonnes);
