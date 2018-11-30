@@ -4,6 +4,12 @@ import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
+/**
+ * 
+ * @author Group 14 -2TL2
+ *
+ */
+
 public class Fenetre extends JFrame {
 
 	  public Fenetre(){
@@ -12,7 +18,7 @@ public class Fenetre extends JFrame {
 	    this.setTitle("JTable");
 	    this.setSize(800, 575);
 	    
-	    //Les données du tableau
+	    //Les donnÃ©es du tableau
 	    Tableau tab = new Tableau(6, 6, 4);
 	    Object [][] data = tab.getTab();
 
