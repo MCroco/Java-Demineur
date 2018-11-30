@@ -1,5 +1,17 @@
 package first;
 
+/**
+ * This class is calculating :
+ * <ul>
+ * <li> the number of bombs </li>
+ * <li> the numbers around the bombs </li>
+ * <li> the table before creating it</li>
+ * </ul>
+ * @author Group 14 -2TL2
+ *
+ */
+
+
 public class Tableau {
 	private String [][] tab;
 	private Position [] pos;
