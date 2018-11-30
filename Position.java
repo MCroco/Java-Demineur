@@ -1,5 +1,13 @@
 package First;
 
+
+/**
+ * 
+ * @author Group 14 -2TL2
+ *
+ */
+
+
 public class Position {
 	private int ligne;
 	private int colonne;
