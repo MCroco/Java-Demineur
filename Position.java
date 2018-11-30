@@ -1,8 +1,12 @@
-package first;
+package First;
 
 public class Position {
 	private int ligne;
 	private int colonne;
+	
+	public Position(){
+		
+	}
 	
 	public Position(int maxLigne, int maxColonne) {
 		this.ligne = (int)((Math.random() * (maxLigne-1))+1);
