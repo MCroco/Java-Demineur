@@ -1,8 +1,38 @@
-package First;
+package first;
+
+import java.util.ArrayList;
+
+/**
+ * 
+ * Import of the class scanner so the program can use what the user will enter via the keyboard.
+ *
+ */
 
 import java.util.Scanner;
 
-public class Affichage {
+/**
+ * 
+ * This class is showing in the console the grid for the mine-sweeper,
+ * Its main goal is to show the console interaction with the user.
+ * It's showing questions about how the game will evolve and it transmits messages.
+ *
+ * 
+ * @author Group 14 -2TL2
+ * 
+ */
+
+public class Affichage{
+	/**
+	 * 
+	 * 
+	 	* Goal - putting the program together by calling the methods that are needed so everything can run smoothly.
+	 * <p>It creates a new scanner which will asks for different choices of the user.</p>
+	 * <p>One the choices are clear it calls the constructors of the other classes.</p>
+	 * <p>If the choice is not well written an error message will appear.</p>
+	 * <p>At the end of game the scanner is closed.</p>
+	 * 
+	 * 
+	 */
 	
 	public static boolean devoilement(Tableau aff, Tableau tab, Scanner sc) {
 		System.out.println("\n#mettez - montrer ligne;colonne - pour retourner une case\n#mettez - drapeau ligne;colonne - pour mettre un drapeau sur une case");
@@ -19,7 +49,7 @@ public class Affichage {
 			System.out.println(aff);
 		}
 		
-		else if(repSplit[0].equals("montre")){
+		else if(repSplit[0].equals("montrer")){
 			String repSplitCoo[] = repSplit[1].split(";");
 			int x = Integer.parseInt(repSplitCoo[0]) - 1;
 			int y = Integer.parseInt(repSplitCoo[1]) - 1;
@@ -134,22 +164,26 @@ public class Affichage {
 		return true;
 	}
 	
-	public static void devoilChiffres(Tableau aff, Tableau tab, int x, int y, int limitPlacementXMin, int limitPlacementXMax, int limitPlacementYMin, int limitPlacementYMax) {
+	public static ArrayList<Position> devoilChiffres(Tableau aff, Tableau tab, int x, int y, int limitPlacementXMin, int limitPlacementXMax, int limitPlacementYMin, int limitPlacementYMax) {
+		ArrayList <Position> safe = new ArrayList();
 		for(int i=limitPlacementXMin; i<limitPlacementXMax; i++) {
 			for(int j=limitPlacementYMin; j<limitPlacementYMax; j++) {
 				if(!(tab.getCase(x+i, y+j).equals("0")) && !(tab.getCase(x+i, y+j).equals("x")) && !(tab.getCase(x+i, y+j).equals("0"))) {
 					aff.setCase(x+i, y+j, tab.getCase(x+i, y+j));
+					safe.add(new Position (i,j));
 				}
 			}
 		}
+		return safe;
 	}
 	
-	public static void chaineDevoil(Tableau aff, Tableau tab, int x, int y) {
+	public static ArrayList<Position> chaineDevoil(Tableau aff, Tableau tab, int x, int y) {
+		ArrayList <Position> savePos = new ArrayList();
 		int xCond = x+1;
 		int yCond = y+1;
 		
 		if (xCond!=1 && yCond!=1 && xCond!=tab.getLignes() && yCond!=tab.getColonnes()) {
-			devoilChiffres(aff, tab, x, y, -1, 2, -1, 2);
+			savePos.addAll(devoilChiffres(aff, tab, x, y, -1, 2, -1, 2));
 			devoilZero(aff, tab, x, y, -1, 2, -1, 2);
 		}
 		else if (xCond==1 && yCond!=1 && xCond!=tab.getLignes() && yCond!=tab.getColonnes()) {
@@ -235,4 +269,17 @@ public class Affichage {
 		}
 		sc.close();
 	}
+	
+	/**
+	 * 
+	 * Goal - ask the user to put a flag or to do an action to a specific box of the grid 
+	 * 
+	 * @param aff - it receives the coordinates from the scanner and it shows in the console to the user
+	 * 				<p>		If the user chooses a flag than in the console and the given coordinates it will show <b> ^ </b></p>
+	 * @param tab - it receives the coordinates from the scanner and it checks the mother table for the data
+	 * @param sc - the answer has to be written in the exact same form as in the question
+	 * @param sc - the case number have to be one number which exists in the grid
+	 * @return true if it is a bomb
+	 * 
+	 */
 }
