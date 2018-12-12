@@ -1,0 +1,89 @@
+package first;
+
+import java.awt.EventQueue;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.ButtonGroup;
+import javax.swing.JFrame;
+import javax.swing.JToggleButton;
+
+
+
+public class GUI extends JFrame{
+	
+
+
+		  public GUI(Tableau tab){
+			  
+	      
+
+		    this.setTitle("Démineur");
+
+		    this.setSize(600,600);
+
+		    this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+		    this.setLocationRelativeTo(null);
+
+		    //On définit le layout à utiliser sur le content pane
+
+		    //Trois lignes sur deux colonnes
+		    int a = 10;		  
+		    int b = 15;
+
+		    this.setLayout(new GridLayout(a, b));
+		    //ButtonGroup btnGroup = new ButtonGroup();
+		    for(int i=0; i<a; i++) {
+			    for(int j=0;j<b;j++) {
+			    	String temp = ""+i+";"+j;
+			    	JToggleButton btn = new JToggleButton("");
+			         
+			         //btnGroup.add(btn);
+			         btn.setText("");
+			         btn.setEnabled(true);
+			         btn.setName(temp);
+			         add(btn);
+			         btn.addActionListener(new ActionListener() {
+						
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							String cooCase = btn.getName();
+							String[] coo = cooCase.split(";");	
+							System.out.println(btn.getName());
+							
+							if(tab.getCase(Integer.parseInt(coo[0]), Integer.parseInt(coo[1])).equals("0")) {
+								btn.setText("");
+							}
+							else {
+								btn.setText(tab.getCase(Integer.parseInt(coo[0]), Integer.parseInt(coo[1])));
+							}
+							btn.setEnabled(false);						
+						}
+					} );
+			    	
+			    }
+		    }
+
+		    
+
+		  }      
+
+
+	public static void main(String[] args) {
+		Tableau tab = new Tableau(10, 15, 10);
+		System.out.println(tab);
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					GUI frame = new GUI(tab);
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+}
