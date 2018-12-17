@@ -1,8 +1,6 @@
 package first;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Cursor;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -12,15 +10,17 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Timer;
 import java.util.TimerTask;
-
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.JTextField;
-import javax.swing.JTextPane;
+
+import java.awt.Cursor;
 import javax.swing.SwingConstants;
+import java.awt.BorderLayout;
+import javax.swing.JTextPane;
 import javax.swing.border.LineBorder;
 
 
@@ -34,7 +34,9 @@ public class GUI extends JFrame{
 	int etat=0;
 	String niveau;
 	//JButton[][] tabBoutonsCons = new JButton[10][15];
-	JButton[][] tabBoutons = new JButton[100][100];
+	JButton[][] tabBoutonsFacile = new JButton[10][15];
+	JButton[][] tabBoutonsMoyen = new JButton[20][30];
+	JButton[][] tabBoutonsDifficile = new JButton[30][50];
 	int secondPassed = 0;
     Timer chrono = new Timer();
     TimerTask task = new TimerTask() {
@@ -47,7 +49,8 @@ public class GUI extends JFrame{
 			
 		}
     	
-    };
+};
+	
 
 
 		  public GUI(Tableau tab, int k, int l, int m){
@@ -59,7 +62,7 @@ public class GUI extends JFrame{
 		    int a=10;		  
 		    int b=15;
 		    
-		    
+		    JButton[][] tabBoutons = new JButton[100][100];
 		    JPanel panel = new JPanel();
 		    panel.setAutoscrolls(true);
 		    
@@ -114,6 +117,11 @@ public class GUI extends JFrame{
 		    JSplitPane splitPane_4 = new JSplitPane();
 		    splitPane_3.setRightComponent(splitPane_4);
 		    
+		    JButton btnNewButton_3 = new JButton("start/stop");
+		    btnNewButton_3.setForeground(Color.YELLOW);
+		    btnNewButton_3.setBackground(Color.GRAY);
+		    splitPane_4.setRightComponent(btnNewButton_3);
+		    
 		    
 		    txtChrono = new JTextField();
 		    txtChrono.setDisabledTextColor(Color.BLACK);
@@ -154,7 +162,7 @@ public class GUI extends JFrame{
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					
-					niveau = "Difficile";
+					niveau = "difficile";
 					
 					panel.removeAll();
 					
@@ -163,7 +171,7 @@ public class GUI extends JFrame{
 								
 					Tableau tabDifficile= new Tableau(aDifficile, bDifficile, 250);
 									
-					JButton[][] tabBoutonsDifficile = new JButton[aDifficile][bDifficile];
+					//JButton[][] tabBoutonsDifficile = new JButton[aDifficile][bDifficile];
 					
 					tabBoutonsDifficile = caseDev(tabDifficile, aDifficile, bDifficile);
 					
@@ -175,7 +183,7 @@ public class GUI extends JFrame{
 					    for(int j=0;j<bDifficile;j++) {
 					    	
 					    	panel.add(tabBoutonsDifficile[i][j]);
-					    	tabBoutons[i][j]=tabBoutonsDifficile[i][j];
+					    	tabBoutonsDifficile[i][j]=tabBoutonsDifficile[i][j];
 					    }
 		    		}
 					
@@ -203,7 +211,7 @@ public class GUI extends JFrame{
 								
 					Tableau tabMoyen = new Tableau(aMoyen, bMoyen, 40);
 									
-					JButton[][] tabBoutonsMoyen = new JButton[aMoyen][bMoyen];
+					//JButton[][] tabBoutonsMoyen = new JButton[aMoyen][bMoyen];
 					
 					tabBoutonsMoyen = caseDev(tabMoyen, aMoyen, bMoyen);
 					
@@ -215,7 +223,7 @@ public class GUI extends JFrame{
 					    for(int j=0;j<bMoyen;j++) {
 					    	
 					    	panel.add(tabBoutonsMoyen[i][j]);
-					    	tabBoutons[i][j]=tabBoutonsMoyen[i][j];
+					    	tabBoutonsMoyen[i][j]=tabBoutonsMoyen[i][j];
 					    }
 		    		}
 					
@@ -246,7 +254,7 @@ public class GUI extends JFrame{
 								
 					Tableau tabFacile = new Tableau(aFacile, bFacile, 10);
 									
-					JButton[][] tabBoutonsFacile = new JButton[aFacile][bFacile];
+					//JButton[][] tabBoutonsFacile = new JButton[aFacile][bFacile];
 					
 					tabBoutonsFacile = caseDev(tabFacile, aFacile, bFacile);
 					
@@ -258,7 +266,7 @@ public class GUI extends JFrame{
 					    for(int j=0;j<bFacile;j++) {
 					    	
 					    	panel.add(tabBoutonsFacile[i][j]);
-					    	tabBoutons[i][j]=tabBoutonsFacile[i][j];
+					    	tabBoutonsFacile[i][j]=tabBoutonsFacile[i][j];
 					    }
 		    		}
 					
@@ -280,17 +288,16 @@ public class GUI extends JFrame{
 		    txtpnBienvenueDansLe.setText("Bienvenue dans le jeu du d\u00E9mineur!\r\nVeuillez choisir un niveau pour pouvoir commencer une partie.\r\n\r\nN'oubliez pas de cliquez sur start lorsque vous \u00EAtes pr\u00EAt!");
 		    panel.add(txtpnBienvenueDansLe, BorderLayout.NORTH);
 		    
+		    
 		    btnStart.addActionListener(new ActionListener() {
 		    	
 		    	public void actionPerformed(ActionEvent e) {
-		    		
-		    		
 		    		
 		    		if(niveau.equals("facile")) {
 		    			for(int i=0; i<10; i++) {
 						    for(int j=0;j<15;j++) {
 						    	
-						    	tabBoutons[i][j].setEnabled(true);
+						    	tabBoutonsFacile[i][j].setEnabled(true);
 						    }
 			    		}
 		    		}
@@ -298,7 +305,7 @@ public class GUI extends JFrame{
 		    			for(int i=0; i<20; i++) {
 						    for(int j=0;j<30;j++) {
 						    	
-						    	tabBoutons[i][j].setEnabled(true);
+						    	tabBoutonsMoyen[i][j].setEnabled(true);
 						    }
 			    		}
 		    		}
@@ -306,26 +313,27 @@ public class GUI extends JFrame{
 		    			for(int i=0; i<30; i++) {
 						    for(int j=0;j<50;j++) {
 						    	
-						    	tabBoutons[i][j].setEnabled(true);
+						    	tabBoutonsDifficile[i][j].setEnabled(true);
 						    }
 			    		}
 		    		}
 		    		
 
+		    		
+		    		System.out.println("bouton start pressé");
+		    		
 		    		txtChrono.setText("");
 		    		System.out.println("bouton start pressé");
 		    		
 		    		
 		    	
 				    
-				    chrono.scheduleAtFixedRate(task, 1000, 1000);
-				    
-				    
-				   
+		    		chrono.scheduleAtFixedRate(task, 1000, 1000);
+
 		    	}
-		    });	    
+		    });
 		    
-		    	btnStop.addActionListener(new ActionListener() {
+		    btnStop.addActionListener(new ActionListener() {
 		    	
 		    	public void actionPerformed(ActionEvent e) {
 		    		
@@ -333,7 +341,7 @@ public class GUI extends JFrame{
 		    			for(int i=0; i<10; i++) {
 						    for(int j=0;j<15;j++) {
 						    	
-						    	tabBoutons[i][j].setEnabled(false);
+						    	tabBoutonsFacile[i][j].setEnabled(false);
 						    }
 			    		}
 		    		}
@@ -341,7 +349,7 @@ public class GUI extends JFrame{
 		    			for(int i=0; i<20; i++) {
 						    for(int j=0;j<30;j++) {
 						    	
-						    	tabBoutons[i][j].setEnabled(false);
+						    	tabBoutonsMoyen[i][j].setEnabled(false);
 						    }
 			    		}
 		    		}
@@ -349,7 +357,7 @@ public class GUI extends JFrame{
 		    			for(int i=0; i<30; i++) {
 						    for(int j=0;j<50;j++) {
 						    	
-						    	tabBoutons[i][j].setEnabled(false);
+						    	tabBoutonsDifficile[i][j].setEnabled(false);
 						    }
 			    		}
 		    		}
@@ -364,7 +372,8 @@ public class GUI extends JFrame{
 				    
 				   
 		    	}
-		    });	    
+}); 
+		    
 
 
 		  }  
