@@ -8,6 +8,13 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
+import java.util.ArrayList;
+import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
 import javax.swing.BorderFactory;
@@ -22,6 +29,8 @@ import javax.swing.SwingConstants;
 import java.awt.BorderLayout;
 import javax.swing.JTextPane;
 import javax.swing.border.LineBorder;
+import java.awt.Insets;
+import javax.swing.JTextArea;
 
 
 
@@ -50,10 +59,15 @@ public class GUI extends JFrame{
 		}
     	
 };
+
+	static String messageEnvoie;
+	static String messageRecu;
+	
+    private JTextField txtEntrezLeMessage;
 	
 
 
-		  public GUI(Tableau tab, int k, int l, int m){
+		  public GUI(Tableau aff,Tableau tab, int k, int l, int m){
 		  	
 		  	setBackground(Color.ORANGE);
 		  	
@@ -67,7 +81,7 @@ public class GUI extends JFrame{
 		    panel.setAutoscrolls(true);
 		    
 		    JButton[][] tabCaseDev = new JButton[a][b];
-		    tabBoutons = caseDev(tab, a, b).clone();
+		    tabBoutons = caseDev(aff,tab, a, b).clone();
 		    for(int i=0; i<k; i++) {
 			    for(int j=0;j<l;j++) {
 			    	tabCaseDev[i][j] = tabBoutons[i][j] ;
@@ -87,15 +101,16 @@ public class GUI extends JFrame{
 		    this.setLocationRelativeTo(null);
 		    GridBagLayout gridBagLayout = new GridBagLayout();
 		    gridBagLayout.columnWidths = new int[]{0, 0};
-		    gridBagLayout.rowHeights = new int[]{0, 0};
+		    gridBagLayout.rowHeights = new int[]{473, 0, 0};
 		    gridBagLayout.columnWeights = new double[]{1.0, Double.MIN_VALUE};
-		    gridBagLayout.rowWeights = new double[]{1.0, Double.MIN_VALUE};
+		    gridBagLayout.rowWeights = new double[]{1.0, 1.0, Double.MIN_VALUE};
 		    getContentPane().setLayout(gridBagLayout);
 		    
 		    JSplitPane splitPane = new JSplitPane();
 		    splitPane.setBorder(new LineBorder(Color.BLACK, 2));
 		    splitPane.setOrientation(JSplitPane.VERTICAL_SPLIT);
 		    GridBagConstraints gbc_splitPane = new GridBagConstraints();
+		    gbc_splitPane.insets = new Insets(0, 0, 5, 0);
 		    gbc_splitPane.fill = GridBagConstraints.BOTH;
 		    gbc_splitPane.gridx = 0;
 		    gbc_splitPane.gridy = 0;
@@ -169,11 +184,13 @@ public class GUI extends JFrame{
 					int aDifficile = 30;
 					int bDifficile = 50;
 								
-					Tableau tabDifficile= new Tableau(aDifficile, bDifficile, 250);
+					Tableau tabDifficile = new Tableau(aDifficile, bDifficile, 250);
+					Tableau tabDifficileAff = new Tableau(aDifficile, bDifficile, 0);
+					System.out.println(tabDifficileAff);
 									
 					//JButton[][] tabBoutonsDifficile = new JButton[aDifficile][bDifficile];
 					
-					tabBoutonsDifficile = caseDev(tabDifficile, aDifficile, bDifficile);
+					tabBoutonsDifficile = caseDev(tabDifficileAff,tabDifficile, aDifficile, bDifficile);
 					
 					System.out.println(tabDifficile);
 					
@@ -210,10 +227,12 @@ public class GUI extends JFrame{
 					
 								
 					Tableau tabMoyen = new Tableau(aMoyen, bMoyen, 40);
+					Tableau tabMoyenAff = new Tableau(aMoyen, bMoyen, 0);
+					System.out.println(tabMoyenAff);
 									
 					//JButton[][] tabBoutonsMoyen = new JButton[aMoyen][bMoyen];
 					
-					tabBoutonsMoyen = caseDev(tabMoyen, aMoyen, bMoyen);
+					tabBoutonsMoyen = caseDev(tabMoyenAff, tabMoyen, aMoyen, bMoyen);
 					
 					System.out.println(tabMoyen);
 					
@@ -253,10 +272,12 @@ public class GUI extends JFrame{
 					int bFacile = 15;
 								
 					Tableau tabFacile = new Tableau(aFacile, bFacile, 10);
+					Tableau tabFacileAff = new Tableau(aFacile, bFacile, 0);
+					System.out.println(tabFacileAff);
 									
 					//JButton[][] tabBoutonsFacile = new JButton[aFacile][bFacile];
 					
-					tabBoutonsFacile = caseDev(tabFacile, aFacile, bFacile);
+					tabBoutonsFacile = caseDev(tabFacileAff, tabFacile, aFacile, bFacile);
 					
 					System.out.println(tab);
 					
@@ -288,42 +309,44 @@ public class GUI extends JFrame{
 		    txtpnBienvenueDansLe.setText("Bienvenue dans le jeu du d\u00E9mineur!\r\nVeuillez choisir un niveau pour pouvoir commencer une partie.\r\n\r\nN'oubliez pas de cliquez sur start lorsque vous \u00EAtes pr\u00EAt!");
 		    panel.add(txtpnBienvenueDansLe, BorderLayout.NORTH);
 		    
+		    JSplitPane splitPane_6 = new JSplitPane();
+		    GridBagConstraints gbc_splitPane_6 = new GridBagConstraints();
+		    gbc_splitPane_6.fill = GridBagConstraints.BOTH;
+		    gbc_splitPane_6.gridx = 0;
+		    gbc_splitPane_6.gridy = 1;
+		    getContentPane().add(splitPane_6, gbc_splitPane_6);
+		    
+		    JButton btnEnvoyer = new JButton("Envoyer");
+		    splitPane_6.setLeftComponent(btnEnvoyer);
+		    
+		    JPanel panel_1 = new JPanel();
+		    splitPane_6.setRightComponent(panel_1);
+		    panel_1.setLayout(new BorderLayout(0, 0));
+		    
+		    txtEntrezLeMessage = new JTextField();
+		    txtEntrezLeMessage.setText("Entrez le message ici");
+		    messageEnvoie = txtEntrezLeMessage.getText();
+		    panel_1.add(txtEntrezLeMessage, BorderLayout.SOUTH);
+		    txtEntrezLeMessage.setColumns(10);
+		    
+		    JTextArea txtrAfficheLeMessage = new JTextArea();
+		    txtrAfficheLeMessage.setText(messageRecu);
+		    txtrAfficheLeMessage.setEditable(false);
+		    panel_1.add(txtrAfficheLeMessage, BorderLayout.CENTER);
+		    
 		    
 		    btnStart.addActionListener(new ActionListener() {
 		    	
 		    	public void actionPerformed(ActionEvent e) {
 		    		
-		    		if(niveau.equals("facile")) {
-		    			for(int i=0; i<10; i++) {
-						    for(int j=0;j<15;j++) {
-						    	
-						    	tabBoutonsFacile[i][j].setEnabled(true);
-						    }
-			    		}
-		    		}
-		    		else if(niveau.equals("moyen")) {
-		    			for(int i=0; i<20; i++) {
-						    for(int j=0;j<30;j++) {
-						    	
-						    	tabBoutonsMoyen[i][j].setEnabled(true);
-						    }
-			    		}
-		    		}
-		    		else if(niveau.equals("difficile")) {
-		    			for(int i=0; i<30; i++) {
-						    for(int j=0;j<50;j++) {
-						    	
-						    	tabBoutonsDifficile[i][j].setEnabled(true);
-						    }
-			    		}
-		    		}
+		    		changeEtatCase(true);
 		    		
 
 		    		
 		    		System.out.println("bouton start pressé");
 		    		
 		    		txtChrono.setText("");
-		    		System.out.println("bouton start pressé");
+		    		
 		    		
 		    		
 		    	
@@ -337,30 +360,7 @@ public class GUI extends JFrame{
 		    	
 		    	public void actionPerformed(ActionEvent e) {
 		    		
-		    		if(niveau.equals("facile")) {
-		    			for(int i=0; i<10; i++) {
-						    for(int j=0;j<15;j++) {
-						    	
-						    	tabBoutonsFacile[i][j].setEnabled(false);
-						    }
-			    		}
-		    		}
-		    		else if(niveau.equals("moyen")) {
-		    			for(int i=0; i<20; i++) {
-						    for(int j=0;j<30;j++) {
-						    	
-						    	tabBoutonsMoyen[i][j].setEnabled(false);
-						    }
-			    		}
-		    		}
-		    		else if(niveau.equals("difficile")) {
-		    			for(int i=0; i<30; i++) {
-						    for(int j=0;j<50;j++) {
-						    	
-						    	tabBoutonsDifficile[i][j].setEnabled(false);
-						    }
-			    		}
-		    		}
+		    		changeEtatCase(false);
 		    		
 
 		    		
@@ -372,13 +372,39 @@ public class GUI extends JFrame{
 				    
 				   
 		    	}
-}); 
-		    
+		    });	    
 
 
-		  }  
+		  } 
 		  
-		  public JButton[][] caseDev(Tableau tab, int a, int b){
+		  public void changeEtatCase(Boolean etat) {
+	    		if(niveau.equals("facile")) {
+	    			for(int i=0; i<10; i++) {
+					    for(int j=0;j<15;j++) {
+					    	
+					    	tabBoutonsFacile[i][j].setEnabled(etat);
+					    }
+		    		}
+	    		}
+	    		else if(niveau.equals("moyen")) {
+	    			for(int i=0; i<20; i++) {
+					    for(int j=0;j<30;j++) {
+					    	
+					    	tabBoutonsMoyen[i][j].setEnabled(etat);
+					    }
+		    		}
+	    		}
+	    		else if(niveau.equals("difficile")) {
+	    			for(int i=0; i<30; i++) {
+					    for(int j=0;j<50;j++) {
+					    	
+					    	tabBoutonsDifficile[i][j].setEnabled(etat);
+					    }
+		    		}
+	    		}
+		  }
+		  
+		  public JButton[][] caseDev(Tableau aff, Tableau tab, int a, int b){
 			  JButton[][] tabCaseDev = new JButton[a][b];
 			  for(int i=0; i<a; i++) {
 				    for(int j=0;j<b;j++) {
@@ -409,9 +435,20 @@ public class GUI extends JFrame{
 								if(tab.getCase(Integer.parseInt(coo[0]), Integer.parseInt(coo[1])).equals("0")) {
 									btn.setText("");
 									btn.setBackground(Color.WHITE);
+									
 
 									
 								}
+								else if(tab.getCase(Integer.parseInt(coo[0]), Integer.parseInt(coo[1])).equals("x")) {
+									btn.setText(tab.getCase(Integer.parseInt(coo[0]), Integer.parseInt(coo[1])));
+									btn.setBackground(Color.WHITE);
+									changeEtatCase(false);
+						    		//afficher un message "PERDU"
+						    		task.cancel();
+						    		chrono.cancel();
+									
+								}
+								
 								else {
 									btn.setForeground(Color.RED);
 									btn.setText(tab.getCase(Integer.parseInt(coo[0]), Integer.parseInt(coo[1])));
@@ -430,16 +467,73 @@ public class GUI extends JFrame{
 		  
 	public static void main(String[] args) {
 		Tableau tab = new Tableau(10, 15, 10);
+		Tableau aff = new Tableau(10, 15, 0);
 		System.out.println(tab);
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					GUI frame = new GUI(tab,10,15,10);
+					GUI frame = new GUI(aff,tab,10,15,10);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
 		});
+		
+	      final Socket clientSocket;
+	      final BufferedReader in;
+	      final PrintWriter out;
+	      final Scanner sc = new Scanner(System.in);//pour lire à partir du clavier
+	  
+	      try {
+	         /*
+	         * les informations du serveur ( port et adresse IP ou nom d'hote
+	         * 127.0.0.1 est l'adresse local de la machine
+	         */
+	         clientSocket = new Socket("127.0.0.1",5000);
+	   
+	         //flux pour envoyer
+	         out = new PrintWriter(clientSocket.getOutputStream());
+	         //flux pour recevoir
+	         in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+	   
+	         Thread envoyer = new Thread(new Runnable() {
+	             String msg;
+	              @Override
+	              public void run() {
+	                while(true){
+	                  msg = sc.nextLine();
+	                  out.println(messageEnvoie);
+	                  out.flush();
+	                }
+	             }
+	         });
+	         envoyer.start();
+	   
+	        Thread recevoir = new Thread(new Runnable() {
+	            String msg;
+	            @Override
+	            public void run() {
+	               try {
+	                 messageRecu = in.readLine();
+	                 while(messageRecu!=null){
+	                    System.out.println("Serveur : "+msg);
+	                    messageRecu = in.readLine();
+	                 }
+	                 System.out.println("Serveur déconecté");
+	                 out.close();
+	                 clientSocket.close();
+	               } catch (IOException e) {
+	                   e.printStackTrace();
+	               }
+	            }
+	        });
+	        recevoir.start();
+	   
+	      } catch (IOException e) {
+	           e.printStackTrace();
+	      }
 	}
+	
+	
 }
