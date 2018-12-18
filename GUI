@@ -41,11 +41,11 @@ public class GUI extends JFrame{
 	private static final long serialVersionUID = 1L;
 	private JTextField txtChrono;
 	int etat=0;
-	String niveau;
+	private static String niveau;
 	//JButton[][] tabBoutonsCons = new JButton[10][15];
-	JButton[][] tabBoutonsFacile = new JButton[10][15];
-	JButton[][] tabBoutonsMoyen = new JButton[20][30];
-	JButton[][] tabBoutonsDifficile = new JButton[30][50];
+	private static JButton[][] tabBoutonsFacile = new JButton[10][15];
+	private static JButton[][] tabBoutonsMoyen = new JButton[20][30];
+	private static JButton[][] tabBoutonsDifficile = new JButton[30][50];
 	int secondPassed = 0;
     Timer chrono = new Timer();
     TimerTask task = new TimerTask() {
@@ -273,13 +273,12 @@ public class GUI extends JFrame{
 								
 					Tableau tabFacile = new Tableau(aFacile, bFacile, 10);
 					Tableau tabFacileAff = new Tableau(aFacile, bFacile, 0);
-					System.out.println(tabFacileAff);
 									
 					//JButton[][] tabBoutonsFacile = new JButton[aFacile][bFacile];
 					
 					tabBoutonsFacile = caseDev(tabFacileAff, tabFacile, aFacile, bFacile);
 					
-					System.out.println(tab);
+					System.out.println(tabFacile);
 					
 					panel.setLayout(new GridLayout(aFacile, bFacile));
 					
@@ -287,7 +286,6 @@ public class GUI extends JFrame{
 					    for(int j=0;j<bFacile;j++) {
 					    	
 					    	panel.add(tabBoutonsFacile[i][j]);
-					    	tabBoutonsFacile[i][j]=tabBoutonsFacile[i][j];
 					    }
 		    		}
 					
@@ -432,15 +430,14 @@ public class GUI extends JFrame{
 								String[] coo = cooCase.split(";");	
 								System.out.println(btn.getName());
 								
-								if(tab.getCase(Integer.parseInt(coo[0]), Integer.parseInt(coo[1])).equals("0")) {
-									btn.setText("");
-									btn.setBackground(Color.WHITE);
-									
-
-									
+								int cooX = Integer.parseInt(coo[0]);
+								int cooY = Integer.parseInt(coo[1]);
+								
+								if(tab.getCase(cooX, cooY).equals("0")) {
+									chaineDevoil(tab, cooX, cooY, btn);									
 								}
-								else if(tab.getCase(Integer.parseInt(coo[0]), Integer.parseInt(coo[1])).equals("x")) {
-									btn.setText(tab.getCase(Integer.parseInt(coo[0]), Integer.parseInt(coo[1])));
+								if(tab.getCase(cooX, cooY).equals("x")) {
+									btn.setText(tab.getCase(cooX, cooY));
 									btn.setBackground(Color.WHITE);
 									changeEtatCase(false);
 						    		//afficher un message "PERDU"
@@ -451,7 +448,7 @@ public class GUI extends JFrame{
 								
 								else {
 									btn.setForeground(Color.RED);
-									btn.setText(tab.getCase(Integer.parseInt(coo[0]), Integer.parseInt(coo[1])));
+									btn.setText(tab.getCase(cooX, cooY));
 									btn.setBackground(Color.WHITE);
 
 								}
@@ -464,6 +461,118 @@ public class GUI extends JFrame{
 			  
 			  return tabCaseDev;
 		  }
+		  
+		  public static void chaineDevoil(Tableau tab, int x, int y, JButton btn) {
+				int xCond = x+1;
+				int yCond = y+1;
+				
+				if (xCond!=1 && yCond!=1 && xCond!=tab.getLignes() && yCond!=tab.getColonnes()) {
+					devoilChiffres(tab, x, y, -1, 2, -1, 2, btn);
+					devoilZero(tab, x, y, -1, 2, -1, 2, btn);
+				}
+				else if (xCond==1 && yCond!=1 && xCond!=tab.getLignes() && yCond!=tab.getColonnes()) {
+					devoilChiffres(tab, x, y, 0, 2, -1, 2, btn);
+					devoilZero(tab, x, y, 0, 2, -1, 2, btn);
+				}
+				else if (xCond!=1 && yCond!=1 && xCond==tab.getLignes() && yCond!=tab.getColonnes()) {
+					devoilChiffres(tab, x, y, -1, 1, -1, 2, btn);			
+					devoilZero(tab, x, y, -1, 1, -1, 2, btn);
+				}
+				else if (xCond!=1 && yCond==1 && xCond!=tab.getLignes() && yCond!=tab.getColonnes()) {
+					devoilChiffres(tab, x, y, -1, 2, 0, 2, btn);
+					devoilZero(tab, x, y, -1, 2, 0, 2, btn);
+				}
+				else if (xCond!=1 && yCond!=1 && xCond!=tab.getLignes() && yCond==tab.getColonnes()) {
+					devoilChiffres(tab, x, y, -1, 2, -1, 1, btn);
+					devoilZero(tab, x, y, -1, 2, -1, 1, btn);
+				}
+				else if (xCond==1 && yCond==1 && xCond!=tab.getLignes() && yCond!=tab.getColonnes()) {
+					devoilChiffres(tab, x, y, 0, 2, 0, 2, btn);
+					devoilZero(tab, x, y, 0, 2, 0, 2, btn);
+				}
+				else if (xCond!=1 && yCond!=1 && xCond==tab.getLignes() && yCond==tab.getColonnes()) {
+					devoilChiffres(tab, x, y, -1, 1, -1, 1, btn);
+					devoilZero(tab, x, y, -1, 1, -1, 1, btn);
+				}
+				else if (xCond!=1 && yCond==1 && xCond==tab.getLignes() && yCond!=tab.getColonnes()) {
+					devoilChiffres(tab, x, y, -1, 1, 0, 2, btn);
+					devoilZero(tab, x, y, -1, 1, 0, 2, btn);
+				}
+				else if (xCond==1 && yCond!=1 && xCond!=tab.getLignes() && yCond==tab.getColonnes()) {
+					devoilChiffres(tab, x, y, 0, 2, -1, 1, btn);
+					devoilZero(tab, x, y, 0, 2, -1, 1, btn);
+				}
+			}
+			
+			public static void devoilChiffres(Tableau tab, int x, int y, int limitPlacementXMin, int limitPlacementXMax, int limitPlacementYMin, int limitPlacementYMax, JButton btn) {
+				for(int i=limitPlacementXMin; i<limitPlacementXMax; i++) {
+					for(int j=limitPlacementYMin; j<limitPlacementYMax; j++) {
+						if(!(tab.getCase(x+i, y+j).equals("0")) && !(tab.getCase(x+i, y+j).equals("x")) && !(tab.getCase(x+i, y+j).equals("0"))) {
+							if (niveau.equals("facile")) {
+								tabBoutonsFacile[x+i][y+j].setText(tab.getCase(x+i, y+j));
+								tabBoutonsFacile[x+i][y+j].setBackground(Color.WHITE);
+							}
+							else if (niveau.equals("moyen")) {
+								tabBoutonsMoyen[x+i][y+j].setText(tab.getCase(x+i, y+j));
+								tabBoutonsMoyen[x+i][y+j].setBackground(Color.WHITE);
+							}
+							else {
+								tabBoutonsDifficile[x+i][y+j].setText(tab.getCase(x+i, y+j));
+								tabBoutonsDifficile[x+i][y+j].setBackground(Color.WHITE);
+							}
+						}
+					}
+				}
+			}
+			
+			public static void devoilZero (Tableau tab, int x, int y, int limitPlacementXMin, int limitPlacementXMax, int limitPlacementYMin, int limitPlacementYMax, JButton btn) {
+				Position temp;
+				boolean done = false;
+				Position [][] savePosZero = new Position[3][3];
+				if (niveau.equals("facile")) {
+					tabBoutonsFacile[x][y].setText("");
+				}
+				else if (niveau.equals("moyen")) {
+					tabBoutonsMoyen[x][y].setText("");
+				}
+				else {
+					tabBoutonsDifficile[x][y].setText("");
+				}
+				while(!done) {
+					for(int i=limitPlacementXMin; i<limitPlacementXMax; i++) {
+						for(int j=limitPlacementYMin; j<limitPlacementYMax; j++) {
+							if(tab.getCase(x+i, y+j).equals("0") && Math.abs(i) != Math.abs(j)) {
+								tab.setCase(x+i, y+j, " ");
+								if (niveau.equals("facile")) {
+									tabBoutonsFacile[x+i][y+j].setText("");
+								}
+								else if (niveau.equals("moyen")) {
+									tabBoutonsMoyen[x+i][y+j].setText("");
+								}
+								else {
+									tabBoutonsDifficile[x+i][y+j].setText("");
+								}
+								temp = new Position();
+								temp.setLigne(x+i);
+								temp.setColonne(y+j);
+								savePosZero[i+1][j+1] = temp;
+							}
+						}
+					}
+					done = devoilZeroCascade(savePosZero, tab, btn);
+				}
+			}
+			
+			public static boolean devoilZeroCascade(Position [][] arg, Tableau tab, JButton btn) {		
+				for (int i=0; i<arg.length; i++) {
+					for (int j=0; j<arg[i].length; j++) {
+						if (arg[i][j] != null) {
+							chaineDevoil(tab, arg[i][j].getLigne(), arg[i][j].getColonne(), btn);
+						}
+					}
+				}
+				return true;
+			}
 		  
 	public static void main(String[] args) {
 		Tableau tab = new Tableau(10, 15, 10);
