@@ -439,6 +439,7 @@ public class GUI extends JFrame{
 								if(tab.getCase(cooX, cooY).equals("x")) {
 									btn.setText(tab.getCase(cooX, cooY));
 									btn.setBackground(Color.WHITE);
+									devoilBombes(tab);
 									changeEtatCase(false);
 						    		//afficher un message "PERDU"
 						    		task.cancel();
@@ -460,6 +461,27 @@ public class GUI extends JFrame{
 			    }
 			  
 			  return tabCaseDev;
+		  }
+		  
+		  public static void devoilBombes(Tableau tab) {
+			  for (int i = 0; i<tab.getLignes(); i++) {
+				  for (int j = 0; j<tab.getColonnes(); j++) {
+					  if (tab.getCase(i, j).equals("x")) {
+						  if (niveau.equals("facile")) {
+								tabBoutonsFacile[i][j].setText("x");
+								tabBoutonsFacile[i][j].setBackground(Color.WHITE);
+							}
+							else if (niveau.equals("moyen")) {
+								tabBoutonsMoyen[i][j].setText("x");
+								tabBoutonsMoyen[i][j].setBackground(Color.WHITE);
+							}
+							else {
+								tabBoutonsDifficile[i][j].setText("x");
+								tabBoutonsDifficile[i][j].setBackground(Color.WHITE);
+							}
+					  }
+				  }
+			  }
 		  }
 		  
 		  public static void chaineDevoil(Tableau tab, int x, int y, JButton btn) {
