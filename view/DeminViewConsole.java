@@ -7,18 +7,18 @@ import demin.controller.DeminController;
 import demin.model.Tableau;
 
 
-public class DeminViewConsole extends DeminView implements Observer { // qui implÃ©mente Observer
-	// sert ici Ã  lire en console
+public class DeminViewConsole extends DeminView implements Observer { // qui implémente Observer
+	// sert ici à lire en console
 //	protected Scanner sc;
 
 	public DeminViewConsole(Tableau model, DeminController controller) {
 		super(model, controller);
-		// se met Ã  jour lui-mÃªme ici
-		// paramÃ¨tres fourni habituellement lors de l'appel par l'Observable pas nÃ©cessaires ici
+		// se met à jour lui-même ici
+		// paramètres fourni habituellement lors de l'appel par l'Observable pas nécessaires ici
 		update(null, null);
 //		sc = new Scanner(System.in);
-		// La classe interne ReadInput implÃ©mente Runnable, contient donc une mÃ©thode run() 
-		// et peut donc Ãªtre lancÃ©e comme Thread
+		// La classe interne ReadInput implémente Runnable, contient donc une méthode run() 
+		// et peut donc être lancée comme Thread
 		new Thread (new ReadInput()).start();	
 	}
 

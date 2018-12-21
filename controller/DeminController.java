@@ -4,11 +4,11 @@ package demin.controller;
 import demin.model.Tableau;
 import demin.view.DeminView;
 
-//Les vues doivent pouvoir observer le modÃ¨le, d'oÃ¹ l'implÃ©mentation de l'interface java.util.Observer
-// implique simplement l'implÃ©mentation d'une mÃ©thode update(), qui permerttra Ã  l'observable 
-// de dire Ã  tous les Ã©lÃ©ments observer de se mettre Ã  jour si besoin
-//Toutes les vues ayant ce mÃ©canisme, on le reprend ici dans une classe abstraite, 
-// qui sera complÃ©tÃ©e en fonction des spÃ©cificitÃ©s de la vue
+//Les vues doivent pouvoir observer le modèle, d'où l'implémentation de l'interface java.util.Observer
+// implique simplement l'implémentation d'une méthode update(), qui permerttra à l'observable 
+// de dire à tous les éléments observer de se mettre à jour si besoin
+//Toutes les vues ayant ce mécanisme, on le reprend ici dans une classe abstraite, 
+// qui sera complétée en fonction des spécificités de la vue
 public class DeminController {
 	Tableau model; 
 	DeminView view;
@@ -28,22 +28,22 @@ public class DeminController {
 		model.putFlagOnFlag(x, y);
 	}
 	public void erroPutFlag() {
-		view.affiche("Vous ne pouvez pas mettre de drapeau, cette case a dÃ©jÃ  Ã©tÃ© retournÃ©e.");
+		view.affiche("Vous ne pouvez pas mettre de drapeau, cette case a déjà été retournée.");
 	}
 	
 	
 	public void showOnFlag() {
-		view.affiche("Vous avez mis un drapeau sur cette case, vous ne pouvez donc pas la retourner. \n Pour la dÃ©bloquer, rÃ©-utiliser la commande drapeau sur la case.");
+		view.affiche("Vous avez mis un drapeau sur cette case, vous ne pouvez donc pas la retourner. \n Pour la débloquer, ré-utiliser la commande drapeau sur la case.");
 	}
 	public void showAlreadyShown() {
-		view.affiche("Cette case a dÃ©jÃ  Ã©tÃ© retournÃ©e.");
+		view.affiche("Cette case a déjà été retournée.");
 	}
 	
 	public void showOnBombLucky() {
-		view.affiche("Tu as de la chance ! La bombe n'a pas explosÃ©e !");
+		view.affiche("Tu as de la chance ! La bombe n'a pas explosée !");
 	}
 	public void explosionCtrl() {
-		view.affiche("Vous avez explosÃ© !!");
+		view.affiche("Vous avez explosé !!");
 		model.explosion();
 	}
 	
@@ -60,7 +60,7 @@ public class DeminController {
 	}
 	
 	public void luckyDiscoveryBomb() {
-		view.affiche("YAY ! On va maintenant dÃ©couvrir une bombe pour toi !");
+		view.affiche("YAY ! On va maintenant découvrir une bombe pour toi !");
 		model.RandomPosDiscoveryBomb();
 	}
 	

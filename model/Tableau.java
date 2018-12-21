@@ -13,7 +13,7 @@ public class Tableau extends Observable{
 	public Scanner luck;
 	
 	public Tableau() {
-		System.out.println("Quel niveau de difficultÃ© choisissez-vous ? Facile | Moyen | BADASSE | Exit");
+		System.out.println("Quel niveau de difficulté choisissez-vous ? Facile | Moyen | BADASSE | Exit");
 		luck = new Scanner(System.in);
 		while(true){
 			String choice = luck.nextLine();
@@ -42,7 +42,7 @@ public class Tableau extends Observable{
 			}
 			break;
 		}
-//		luck.close();
+		
 		pos = new Position[nombreBombes];
 		for (int i = 0; i<nombreBombes; i++) {
 			pos[i] = new Position(lignes, colonnes);
