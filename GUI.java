@@ -688,6 +688,8 @@ public class GUI extends JFrame implements MouseListener{
 										
 										out.println("~ : L'autre joueur à gagné la partie!");
 						                out.flush();
+						                
+						                changeEtatCase(false);
 									}
 									else if ((Math.random()*100)< 40) {
 										int indexBombe = (int)( Math.random()*tab.getNombreBombes());
@@ -736,6 +738,7 @@ public class GUI extends JFrame implements MouseListener{
 										
 										out.println("~ : L'autre joueur à gagné la partie!");
 						                out.flush();
+						                changeEtatCase(false);
 									}
 								}
 														
