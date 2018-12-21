@@ -10,24 +10,24 @@ import demin.view.DeminViewGUI;
 public class Demin{
 	public Demin() {
 
-		//Création du modèle
-		//TODO
+		//CrÃ©ation du modÃ¨le
+		Tableau tableau =  new Tableau();
 
-		//Création des controleurs : un pour chaque vue
-		//Chaque controleur doit avoir une référence vers le modèle pour pouvoir le commander	
-		//TODO
+		//CrÃ©ation des controleurs : un pour chaque vue
+		//Chaque controleur doit avoir une rÃ©fÃ©rence vers le modÃ¨le pour pouvoir le commander	
+		DeminController ctrlConsole = new DeminController(tableau);
 
-		//Création des vues.
-		//Chaque vue doit connaitre son controleur et avoir une référence vers le modèle pour pouvoir l'observer		
-		//TODO
+		//CrÃ©ation des vues.
+		//Chaque vue doit connaitre son controleur et avoir une rÃ©fÃ©rence vers le modÃ¨le pour pouvoir l'observer		
+		DeminView console = new DeminViewConsole(tableau, ctrlConsole);
 
-		//On donne la référence à la vue pour chaque controleur
-		//TODO		
+		//On donne la rÃ©fÃ©rence Ã  la vue pour chaque controleur
+		ctrlConsole.addView(console);		
 	}
 
 	public static void main(String args[]) {
-		//Thread pour la gestion des évènements dans le GUI swing (important pour éviter des bugs d'affichage ! )
-		//Crée et affiche l'interface graphique
+		//Thread pour la gestion des Ã©vÃ¨nements dans le GUI swing (important pour Ã©viter des bugs d'affichage ! )
+		//CrÃ©e et affiche l'interface graphique
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				new Demin();
